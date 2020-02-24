@@ -1,16 +1,18 @@
 class User {
   final String uid;
+  final String email;
 
-  User({this.uid});
+  User({this.uid, this.email});
 }
 
 class UserData {
-
   final String uid;
+  final String email;
   final String date;
-  final String dreamReport;
+  final String title;
+  final String report;
   final List<String> categories;
 
-  UserData({ this.uid, this.date, this.dreamReport, this.categories });
-
+  UserData(
+      {this.uid, this.email, this.date, this.title, this.report, this.categories});
 }

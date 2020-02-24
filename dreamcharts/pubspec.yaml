@@ -27,6 +27,10 @@ dependencies:
   cloud_firestore: ^0.13.2+1
   provider: ^4.0.4
   flutter_spinkit: ^4.1.1+1
+  gradient_text: ^1.0.2
+  intl: ^0.16.1
+  flutter_datetime_picker: ^1.3.4
+  multiselect_formfield: ^0.1.2
 
 dev_dependencies:
   flutter_test:
@@ -60,7 +64,15 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: Raleway
+      fonts:
+        - asset: assets/Raleway-Regular.ttf
+        - asset: assets/Raleway-ExtraLight.ttf
+          weight: 200
+    - family: Nanum Gothic
+      fonts:
+        - asset: assets/NanumGothic-Regular.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

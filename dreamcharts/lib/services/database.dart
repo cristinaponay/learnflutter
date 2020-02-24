@@ -3,54 +3,51 @@ import 'package:dreamcharts/models/user.dart';
 import 'package:dreamcharts/models/dream.dart';
 
 class DatabaseService {
-
   final String uid;
-  DatabaseService({ this.uid });
+  final String email;
+  DatabaseService({this.uid, this.email});
 
   // collection reference
-  final CollectionReference dreamCollection = Firestore.instance.collection('dreams');
+  final CollectionReference dreamCollection =
+      Firestore.instance.collection('dreams');
 
-  Future<void> updateUserData(String date, String dreamReport, List<String> categories) async {
+  Future<void> updateUserData(
+      String date, String report, List<String> categories) async {
     return await dreamCollection.document(uid).setData({
       'date': date,
-      'dreamReport': dreamReport,
+      'report': report,
       'categories': categories,
     });
   }
 
-   // brew list from snapshot
+  // dream list from snapshot
   List<Dream> _dreamListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.documents.map((doc){
+    return snapshot.documents.map((doc) {
       //print(doc.data);
       return Dream(
-        date: doc.data['date'] ?? '',
-        dreamReport: doc.data['dreamReport'] ?? 0,
-        categories: doc.data['categories'] ?? '0'
-      );
+          date: doc.data['date'] ?? '',
+          report: doc.data['report'] ?? '',
+          categories: List.from(doc.data['categories']) ?? ['']);
     }).toList();
   }
 
   // user data from snapshots
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     return UserData(
-      uid: uid,
-      date: snapshot.data['date'],
-      dreamReport: snapshot.data['dreamReport'],
-      categories: snapshot.data['categories']
-    );
+        uid: uid,
+        email: email,
+        date: snapshot.data['date'],
+        report: snapshot.data['report'],
+        categories: List.from(snapshot.data['categories']));
   }
 
-  // get brews stream
-  Stream<List<Dream>> get brews {
-    return dreamCollection.snapshots()
-      .map(_dreamListFromSnapshot);
+  // get dreams stream
+  Stream<List<Dream>> get dreams {
+    return dreamCollection.snapshots().map(_dreamListFromSnapshot);
   }
 
   // get user doc stream
   Stream<UserData> get userData {
-    return dreamCollection.document(uid).snapshots()
-      .map(_userDataFromSnapshot);
+    return dreamCollection.document(uid).snapshots().map(_userDataFromSnapshot);
   }
-
-
 }

@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dreamcharts/models/user.dart';
 import 'package:dreamcharts/services/database.dart';
+import 'package:intl/intl.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   // create user object based on FirebaseUser
   User _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+    return user != null ? User(uid: user.uid, email: user.email) : null;
   }
 
   // auth change user stream
@@ -16,17 +17,17 @@ class AuthService {
         .map(_userFromFirebaseUser); // alternative way to write it
   }
 
-  // // sign in anon
-  // Future signInAnon() async {
-  //   try {
-  //     AuthResult result = await _auth.signInAnonymously();
-  //     FirebaseUser user = result.user;
-  //     return _userFromFirebaseUser(user);
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return null;
-  //   }
-  // }
+  // sign in anon
+  Future signInAnon() async {
+    try {
+      AuthResult result = await _auth.signInAnonymously();
+      FirebaseUser user = result.user;
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   // sign in with email and password
   Future signInWithEmailAndPassword(String email, String password) async {
@@ -48,8 +49,7 @@ class AuthService {
       FirebaseUser user = result.user;
 
       // create a new document for the user with the uid
-      
-      await DatabaseService(uid: user.uid).updateUserData(DateTime.now().toString(),'New dream', ["Safety"]);
+      await DatabaseService(uid: user.uid, email: user.email).updateUserData(DateFormat('yyyy-MM-dd').format(DateTime.now()),'New dream', ['']);
 
       return _userFromFirebaseUser(user);
     } catch (e) {
